@@ -1,0 +1,53 @@
+<cu-custom bgColor="bg-gradual-blue" isBack="{{false}}">
+  <view slot="content">考试</view>
+</cu-custom>
+
+<!-- 计时器 -->
+<view class="cu-bar bg-white solid-bottom justify-center">
+  <text class="cuIcon-time {{wxTimer<'00:01:00'?'text-red':'text-blue'}}">{{wxTimer}}</text>
+</view>
+
+<!-- 答题部分 -->
+<scroll-view scroll-y="true" style="height:960rpx">
+  <view style='padding-bottom:10rpx;'>
+    <view class="question-list">
+      <view class="question-list-title">
+        <text class='question-title'>{{tags+1}}/{{questions.length}}.{{questions[tags].title}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="my-bar bg-white solid-bottom" wx:for='{{questions[tags].options}}' wx:key='id'>
+    <view data-index="{{index}}" data-value="{{item.value}}" data-checked="{{item.checked}}" class="{{item.checked==true?'bg-green':'bg-white'}} my-bar" bindtap="chooseAnswer">
+      <view class="text-l margin">
+        {{item.value}}:{{item.name}}
+      </view>
+    </view>
+  </view>
+
+</scroll-view>
+
+<!-- 底部导航栏 -->
+<view class="flex justify-center padding-bottom-xl padding-top-xl fixed-bottom bg-white">
+  <!-- 上一题按钮 -->
+  <button class="cu-btn round bg-blue shadow margin-right-lg" bindtap='beforeQuestion'>上一题</button>
+  <!-- 答题卡按钮 -->
+  <button class="cu-btn bg-green round shadow margin-left-lg margin-right-lg" bindtap="showModal" data-target="bottomModal">
+    答题卡
+  </button>
+
+  <view class="cu-modal bottom-modal {{modalName=='bottomModal'?'show':''}}">
+    <view class="cu-dialog">
+      <view class="cu-bar bg-white">
+        <view class="action text-blue" bindtap="hideModal">收起</view>
+      </view>
+      <view>
+        <view wx:for='{{cardArr}}' class="margin " style='display:inline-block' wx:key="id">
+          <button class="cu-btn round bg-{{item?'green':'red'}}" data-index='{{index}}' bindtap="cardClick">{{index+1}}</button>
+        </view>
+      </view>
+    </view>
+  </view>
+  <!-- 交卷按钮 -->
+  <button class="cu-btn round bg-red shadow margin-left-lg" bindtap='submit'>交卷</button>
+</view>
